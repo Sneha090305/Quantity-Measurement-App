@@ -25,6 +25,7 @@ public class QuantityMeasurementApp {
             this.value = value;
         }
     }
+    // UC2 implementationgit status
     public static class Inches {
 
         private final double value;
