@@ -99,6 +99,15 @@ public class QuantityMeasurementApp {
 
             Length other = (Length) obj;
 
+feature/UC9-weight-measurement
+            double difference = Math.abs(this.toBaseUnit() - other.toBaseUnit());
+
+            return difference < 0.0001;
+        }
+
+        // UC5 Static conversion
+        public static double convert(double value, LengthUnit source, LengthUnit target) {
+
             double difference =
                     Math.abs(this.toBaseUnit() - other.toBaseUnit());
 
@@ -108,6 +117,7 @@ public class QuantityMeasurementApp {
         public static double convert(double value,
                                      LengthUnit source,
                                      LengthUnit target) {
+develop
 
             if (!Double.isFinite(value))
                 throw new IllegalArgumentException("Invalid numeric value");
@@ -116,7 +126,10 @@ public class QuantityMeasurementApp {
                 throw new IllegalArgumentException("Unit cannot be null");
 
             double baseValue = source.convertToBaseUnit(value);
+feature/UC9-weight-measurement
 
+
+develop
             return target.convertFromBaseUnit(baseValue);
         }
 
@@ -124,7 +137,10 @@ public class QuantityMeasurementApp {
         public Length convertTo(LengthUnit target) {
 
             double baseValue = unit.convertToBaseUnit(value);
+feature/UC9-weight-measurement
 
+
+develop
             double convertedValue = target.convertFromBaseUnit(baseValue);
 
             return new Length(convertedValue, target);
