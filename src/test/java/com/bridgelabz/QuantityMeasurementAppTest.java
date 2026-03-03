@@ -578,6 +578,7 @@ public class QuantityMeasurementAppTest {
 
         assertEquals(2.0, result.getValue(), 0.01);
     }
+feature/UC9-weight-measurement
     // UC9 : Weight Measurement Tests
 
     @Test
@@ -725,4 +726,6 @@ public class QuantityMeasurementAppTest {
             new QuantityWeight(1.0, null);
         });
     }
+
+develop
 }
