@@ -2,33 +2,22 @@ package com.bridgelabz;
 
 public enum VolumeUnit implements IMeasurable {
 
-    LITRE(1.0),
-    MILLILITRE(0.001),
-    GALLON(3.78541);
+    LITER(1.0),
+    MILLILITER(0.001);
 
-    private final double conversionFactor;
+    private final double factor;
 
-    VolumeUnit(double conversionFactor) {
-        this.conversionFactor = conversionFactor;
+    VolumeUnit(double factor) {
+        this.factor = factor;
     }
 
     @Override
-    public double getConversionFactor() {
-        return conversionFactor;
+    public double toBase(double value) {
+        return value * factor;
     }
 
     @Override
-    public double convertToBaseUnit(double value) {
-        return value * conversionFactor;
-    }
-
-    @Override
-    public double convertFromBaseUnit(double baseValue) {
-        return baseValue / conversionFactor;
-    }
-
-    @Override
-    public String getUnitName() {
-        return this.name();
+    public double fromBase(double value) {
+        return value / factor;
     }
 }
