@@ -1,10 +1,30 @@
 package com.bridgelabz;
 
+import com.bridgelabz.repository.IQuantityMeasurementRepository;
+import com.bridgelabz.repository.QuantityMeasurementDatabaseRepository;
+import com.bridgelabz.service.IQuantityMeasurementService;
+import com.bridgelabz.service.QuantityMeasurementServiceImpl;
+import com.bridgelabz.controller.QuantityMeasurementController;
+
 public class QuantityMeasurementApp {
 
-    // UC1
-    public static class Feet {
+    public static void main(String[] args) {
 
+        // UC16 Wiring
+        IQuantityMeasurementRepository repo =
+                new QuantityMeasurementDatabaseRepository();
+
+        IQuantityMeasurementService service =
+                new QuantityMeasurementServiceImpl(repo);
+
+        QuantityMeasurementController controller =
+                new QuantityMeasurementController(service);
+
+        System.out.println("Application started with DB");
+    }
+
+    // ================= UC1 =================
+    public static class Feet {
         private final double value;
 
         public Feet(double value) {
@@ -25,9 +45,8 @@ public class QuantityMeasurementApp {
         }
     }
 
-    // UC2
+    // ================= UC2 =================
     public static class Inches {
-
         private final double value;
 
         public Inches(double value) {
@@ -44,7 +63,7 @@ public class QuantityMeasurementApp {
         }
     }
 
-    // UC3–UC7
+    // ================= UC3–UC7 =================
     public static class Length {
 
         private final double value;
@@ -65,7 +84,6 @@ public class QuantityMeasurementApp {
             return value;
         }
 
-
         private double toBaseUnit() {
             return unit.toBase(value);
         }
@@ -77,22 +95,15 @@ public class QuantityMeasurementApp {
 
             Length other = (Length) obj;
 
-            double difference = Math.abs(this.toBaseUnit() - other.toBaseUnit());
-            return difference < 0.0001;
+            double diff = Math.abs(this.toBaseUnit() - other.toBaseUnit());
+            return diff < 0.0001;
         }
 
-
+        // Conversion
         public static double convert(double value, LengthUnit source, LengthUnit target) {
-            if (!Double.isFinite(value))
-                throw new IllegalArgumentException("Invalid numeric value");
-
-            if (source == null || target == null)
-                throw new IllegalArgumentException("Unit cannot be null");
-
             double baseValue = source.toBase(value);
             return target.fromBase(baseValue);
         }
-
 
         public Length convertTo(LengthUnit target) {
             double baseValue = unit.toBase(value);
@@ -100,47 +111,22 @@ public class QuantityMeasurementApp {
             return new Length(convertedValue, target);
         }
 
-        // UC6
+        // Addition
         public Length add(Length other) {
-            if (other == null)
-                throw new IllegalArgumentException("Length cannot be null");
-
             double sumBase = this.toBaseUnit() + other.toBaseUnit();
-
-
-            double resultValue = unit.fromBase(sumBase);
-
-            return new Length(resultValue, unit);
+            double result = unit.fromBase(sumBase);
+            return new Length(result, unit);
         }
 
-        // UC7
         public Length add(Length other, LengthUnit targetUnit) {
-            if (other == null)
-                throw new IllegalArgumentException("Length cannot be null");
-
-            if (targetUnit == null)
-                throw new IllegalArgumentException("Target unit cannot be null");
-
             double sumBase = this.toBaseUnit() + other.toBaseUnit();
-
-
-            double resultValue = targetUnit.fromBase(sumBase);
-
-            return new Length(resultValue, targetUnit);
+            double result = targetUnit.fromBase(sumBase);
+            return new Length(result, targetUnit);
         }
 
         @Override
         public String toString() {
             return value + " " + unit;
         }
-    }
-
-    public static void main(String[] args) {
-
-        Quantity l1 = new Quantity(10.0, LengthUnit.FEET);
-        Quantity l2 = new Quantity(6.0, LengthUnit.INCHES);
-
-        System.out.println("Subtraction Result: " + l1.subtract(l2));
-        System.out.println("Division Result: " + l1.divide(l2));
     }
 }
