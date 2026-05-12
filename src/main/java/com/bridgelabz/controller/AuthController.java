@@ -17,15 +17,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public AuthResponse register(
-            @RequestBody RegisterRequest request) {
-
+            @RequestBody RegisterRequest request
+    ) {
         return authService.register(request);
     }
 
     @PostMapping("/login")
     public AuthResponse login(
-            @RequestBody AuthRequest request) {
-
+            @RequestBody AuthRequest request
+    ) {
         return authService.login(request);
     }
 }

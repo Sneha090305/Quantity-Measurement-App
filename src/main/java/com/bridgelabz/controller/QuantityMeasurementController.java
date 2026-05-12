@@ -1,27 +1,33 @@
 package com.bridgelabz.controller;
 
-import com.bridgelabz.dto.QuantityDTO;
+import com.bridgelabz.dto.QuantityInputDTO;
+import com.bridgelabz.dto.QuantityMeasurementDTO;
 import com.bridgelabz.service.IQuantityMeasurementService;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/v1/quantities")
 public class QuantityMeasurementController {
 
-    private final IQuantityMeasurementService service;
+    @Autowired
+    private IQuantityMeasurementService service;
 
-    public QuantityMeasurementController(IQuantityMeasurementService service) {
-        this.service = service;
+    @PostMapping("/compare")
+    public QuantityMeasurementDTO compare(@RequestBody QuantityInputDTO input) {
+        return service.compare(input);
     }
 
-
-    public boolean compare(QuantityDTO q1, QuantityDTO q2) {
-        return service.compare(q1, q2);
+    @PostMapping("/add")
+    public QuantityMeasurementDTO add(@RequestBody QuantityInputDTO input) {
+        return service.add(input);
     }
 
-    public QuantityDTO convert(QuantityDTO q, String targetUnit) {
-        return service.convert(q, targetUnit);
-    }
-
-
-    public QuantityDTO add(QuantityDTO q1, QuantityDTO q2) {
-        return service.add(q1, q2);
+    @GetMapping("/history/{operation}")
+    public List<QuantityMeasurementDTO> history(@PathVariable String operation) {
+        return service.getHistory(operation);
     }
 }

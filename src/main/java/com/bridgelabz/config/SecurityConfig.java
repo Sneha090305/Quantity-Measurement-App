@@ -27,10 +27,24 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
-                                "/auth/**"
+                                "/auth/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/oauth2/**",
+                                "/login/**"
                         ).permitAll()
+
                         .anyRequest().authenticated()
+                )
+
+                .oauth2Login(oauth -> oauth
+                        .defaultSuccessUrl(
+                                "/swagger-ui/index.html",
+                                true
+                        )
                 )
 
                 .sessionManagement(session -> session
@@ -49,6 +63,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 

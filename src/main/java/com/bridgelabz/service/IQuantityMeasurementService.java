@@ -1,12 +1,15 @@
 package com.bridgelabz.service;
 
-import com.bridgelabz.dto.QuantityDTO;
+import com.bridgelabz.dto.QuantityInputDTO;
+import com.bridgelabz.dto.QuantityMeasurementDTO;
+
+import java.util.List;
 
 public interface IQuantityMeasurementService {
 
-    boolean compare(QuantityDTO q1, QuantityDTO q2);
+    QuantityMeasurementDTO compare(QuantityInputDTO input);
 
-    QuantityDTO convert(QuantityDTO q, String targetUnit);
+    QuantityMeasurementDTO add(QuantityInputDTO input);
 
-    QuantityDTO add(QuantityDTO q1, QuantityDTO q2);
+    List<QuantityMeasurementDTO> getHistory(String operation);
 }

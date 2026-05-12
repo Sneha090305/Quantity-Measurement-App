@@ -1,74 +1,51 @@
 package com.bridgelabz.service;
 
-import com.bridgelabz.*;
-import com.bridgelabz.dto.QuantityDTO;
-import com.bridgelabz.entity.QuantityMeasurementEntity;
-import com.bridgelabz.exception.QuantityMeasurementException;
-import com.bridgelabz.repository.IQuantityMeasurementRepository;
+import com.bridgelabz.dto.QuantityInputDTO;
+import com.bridgelabz.dto.QuantityMeasurementDTO;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
 public class QuantityMeasurementServiceImpl implements IQuantityMeasurementService {
 
-    private final IQuantityMeasurementRepository repository;
-
-    public QuantityMeasurementServiceImpl(IQuantityMeasurementRepository repository) {
-        this.repository = repository;
-    }
-
+    private final List<QuantityMeasurementDTO> history = new ArrayList<>();
 
     @Override
-    public boolean compare(QuantityDTO q1, QuantityDTO q2) {
+    public QuantityMeasurementDTO compare(QuantityInputDTO input) {
 
-        Quantity quantity1 = new Quantity(q1.getValue(), getUnit(q1));
-        Quantity quantity2 = new Quantity(q2.getValue(), getUnit(q2));
+        boolean equal = input.getValue1() == input.getValue2();
 
-        boolean result = quantity1.equals(quantity2);
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+                        equal ? "Equal Quantities" : "Not Equal",
+                        0
+                );
 
-        repository.save(new QuantityMeasurementEntity("COMPARE", String.valueOf(result)));
+        history.add(response);
 
-        return result;
+        return response;
     }
-
 
     @Override
-    public QuantityDTO convert(QuantityDTO q, String targetUnit) {
+    public QuantityMeasurementDTO add(QuantityInputDTO input) {
 
-        Quantity quantity = new Quantity(q.getValue(), getUnit(q));
+        double result = input.getValue1() + input.getValue2();
 
-        IMeasurable target = getUnitByName(targetUnit);
+        QuantityMeasurementDTO response =
+                new QuantityMeasurementDTO(
+                        "Addition Successful",
+                        result
+                );
 
-        Quantity converted = quantity.convertTo(target);
+        history.add(response);
 
-        repository.save(new QuantityMeasurementEntity("CONVERT", String.valueOf(converted.getValue())));
-
-        return new QuantityDTO(converted.getValue(), targetUnit, q.getMeasurementType());
+        return response;
     }
-
 
     @Override
-    public QuantityDTO add(QuantityDTO q1, QuantityDTO q2) {
-
-        Quantity quantity1 = new Quantity(q1.getValue(), getUnit(q1));
-        Quantity quantity2 = new Quantity(q2.getValue(), getUnit(q2));
-
-        Quantity result = quantity1.add(quantity2);
-
-        repository.save(new QuantityMeasurementEntity("ADD", String.valueOf(result.getValue())));
-
-        return new QuantityDTO(result.getValue(), q1.getUnit(), q1.getMeasurementType());
-    }
-
-    // 🔹 HELPER METHODS
-    private IMeasurable getUnit(QuantityDTO dto) {
-        return getUnitByName(dto.getUnit());
-    }
-
-    private IMeasurable getUnitByName(String unitName) {
-
-        try { return LengthUnit.valueOf(unitName.toUpperCase()); } catch (Exception ignored) {}
-        try { return WeightUnit.valueOf(unitName.toUpperCase()); } catch (Exception ignored) {}
-        try { return VolumeUnit.valueOf(unitName.toUpperCase()); } catch (Exception ignored) {}
-        try { return TemperatureUnit.valueOf(unitName.toUpperCase()); } catch (Exception ignored) {}
-
-        throw new QuantityMeasurementException("Invalid Unit: " + unitName);
+    public List<QuantityMeasurementDTO> getHistory(String operation) {
+        return history;
     }
 }
