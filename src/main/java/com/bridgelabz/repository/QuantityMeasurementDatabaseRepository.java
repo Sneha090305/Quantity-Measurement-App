@@ -1,11 +1,20 @@
 package com.bridgelabz.repository;
 
 import com.bridgelabz.entity.QuantityMeasurementEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public class QuantityMeasurementDatabaseRepository implements IQuantityMeasurementRepository {
+import java.util.List;
 
-    @Override
-    public void save(QuantityMeasurementEntity entity) {
-        System.out.println("Saved to DB: " + entity);
-    }
+@Repository
+public interface QuantityMeasurementDatabaseRepository
+        extends JpaRepository<QuantityMeasurementEntity, Long> {
+
+    List<QuantityMeasurementEntity> findByOperationType(
+            String operationType
+    );
+
+    Long countByOperationType(
+            String operationType
+    );
 }

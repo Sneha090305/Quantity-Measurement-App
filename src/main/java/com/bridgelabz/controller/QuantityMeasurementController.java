@@ -1,10 +1,12 @@
 package com.bridgelabz.controller;
 
-import com.bridgelabz.dto.QuantityInputDTO;
-import com.bridgelabz.dto.QuantityMeasurementDTO;
+import com.bridgelabz.dto.QuantityRequestDTO;
+import com.bridgelabz.dto.QuantityResponseDTO;
+import com.bridgelabz.entity.QuantityMeasurementEntity;
 import com.bridgelabz.service.IQuantityMeasurementService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,20 +16,48 @@ import java.util.List;
 public class QuantityMeasurementController {
 
     @Autowired
-    private IQuantityMeasurementService service;
+    private IQuantityMeasurementService quantityMeasurementService;
 
-    @PostMapping("/compare")
-    public QuantityMeasurementDTO compare(@RequestBody QuantityInputDTO input) {
-        return service.compare(input);
+    @PostMapping("/operate")
+    public ResponseEntity<QuantityResponseDTO> performOperation(
+            @RequestBody QuantityRequestDTO request
+    ) {
+
+        return ResponseEntity.ok(
+                quantityMeasurementService.performOperation(request)
+        );
     }
 
-    @PostMapping("/add")
-    public QuantityMeasurementDTO add(@RequestBody QuantityInputDTO input) {
-        return service.add(input);
+    @GetMapping("/history")
+    public ResponseEntity<List<QuantityMeasurementEntity>>
+    getAllHistory() {
+
+        return ResponseEntity.ok(
+                quantityMeasurementService.getAllHistory()
+        );
     }
 
-    @GetMapping("/history/{operation}")
-    public List<QuantityMeasurementDTO> history(@PathVariable String operation) {
-        return service.getHistory(operation);
+    @GetMapping("/history/{operationType}")
+    public ResponseEntity<List<QuantityMeasurementEntity>>
+    getHistoryByType(
+            @PathVariable String operationType
+    ) {
+
+        return ResponseEntity.ok(
+                quantityMeasurementService
+                        .getHistoryByType(operationType)
+        );
+    }
+
+    @GetMapping("/count/{operationType}")
+    public ResponseEntity<Long>
+    getCountByType(
+            @PathVariable String operationType
+    ) {
+
+        return ResponseEntity.ok(
+                quantityMeasurementService
+                        .getCountByType(operationType)
+        );
     }
 }

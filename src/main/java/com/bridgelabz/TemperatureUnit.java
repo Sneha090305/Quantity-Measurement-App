@@ -2,30 +2,33 @@ package com.bridgelabz;
 
 public enum TemperatureUnit implements IMeasurable {
 
-    CELSIUS {
-        public double toBase(double value) {
-            return value;
-        }
-        public double fromBase(double value) {
-            return value;
-        }
-    },
+    CELSIUS,
+    FAHRENHEIT,
+    KELVIN;
 
-    FAHRENHEIT {
-        public double toBase(double value) {
-            return (value - 32) * 5 / 9;
-        }
-        public double fromBase(double value) {
-            return (value * 9 / 5) + 32;
-        }
-    },
+    @Override
+    public double toBase(double value) {
 
-    KELVIN {
-        public double toBase(double value) {
-            return value - 273.15;
-        }
-        public double fromBase(double value) {
-            return value + 273.15;
-        }
-    };
+        return switch (this) {
+
+            case CELSIUS -> value;
+
+            case FAHRENHEIT -> (value - 32) * 5 / 9;
+
+            case KELVIN -> value - 273.15;
+        };
+    }
+
+    @Override
+    public double fromBase(double baseValue) {
+
+        return switch (this) {
+
+            case CELSIUS -> baseValue;
+
+            case FAHRENHEIT -> (baseValue * 9 / 5) + 32;
+
+            case KELVIN -> baseValue + 273.15;
+        };
+    }
 }

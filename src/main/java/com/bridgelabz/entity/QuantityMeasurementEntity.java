@@ -1,31 +1,27 @@
 package com.bridgelabz.entity;
 
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
 public class QuantityMeasurementEntity {
 
-    private String operation;
-    private String result;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    private double value;
 
-    public QuantityMeasurementEntity(String operation, String result) {
-        this.operation = operation;
-        this.result = result;
-    }
+    private String unit;
 
+    private String measurementType;
 
-    public String getOperation() {
-        return operation;
-    }
+    private String operationType;
 
-    public String getResult() {
-        return result;
-    }
+    private double secondValue;
 
+    private String secondUnit;
 
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
-    public void setResult(String result) {
-        this.result = result;
-    }
+    private double result;
 }

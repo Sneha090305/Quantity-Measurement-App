@@ -1,9 +1,9 @@
 package com.bridgelabz;
-
 public enum VolumeUnit implements IMeasurable {
 
     LITER(1.0),
-    MILLILITER(0.001);
+    MILLILITER(0.001),
+    GALLON(3.785);
 
     private final double factor;
 
@@ -17,7 +17,7 @@ public enum VolumeUnit implements IMeasurable {
     }
 
     @Override
-    public double fromBase(double value) {
-        return value / factor;
+    public double fromBase(double baseValue) {
+        return baseValue / factor;
     }
 }
