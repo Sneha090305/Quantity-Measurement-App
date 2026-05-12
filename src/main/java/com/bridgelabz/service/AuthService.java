@@ -11,7 +11,6 @@ import com.bridgelabz.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +44,7 @@ public class AuthService {
 
         userRepository.save(user);
 
-        UserDetails userDetails =
-                org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .authorities(user.getRole().name())
-                        .build();
-
-        String jwtToken = jwtService.generateToken(userDetails);
+        String jwtToken = jwtService.generateToken(user);
 
         return new AuthResponse(jwtToken);
     }
@@ -69,14 +61,7 @@ public class AuthService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow();
 
-        UserDetails userDetails =
-                org.springframework.security.core.userdetails.User
-                        .withUsername(user.getEmail())
-                        .password(user.getPassword())
-                        .authorities(user.getRole().name())
-                        .build();
-
-        String jwtToken = jwtService.generateToken(userDetails);
+        String jwtToken = jwtService.generateToken(user);
 
         return new AuthResponse(jwtToken);
     }

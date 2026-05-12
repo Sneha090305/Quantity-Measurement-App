@@ -5,7 +5,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class AuthResponse {
+public class QuantityMeasurementDTO {
 
-    private String token;
+    private String message;
+    private double result;
 }

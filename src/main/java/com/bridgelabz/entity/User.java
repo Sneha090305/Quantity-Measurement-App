@@ -1,10 +1,19 @@
 package com.bridgelabz.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User {
+@Data
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,54 +29,40 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public User() {
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(
+                new SimpleGrantedAuthority(role.name())
+        );
     }
 
-    public User(Long id, String name, String email, String password, Role role) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
+    @Override
+    public String getUsername() {
         return email;
     }
 
+    @Override
     public String getPassword() {
         return password;
     }
 
-    public Role getRole() {
-        return role;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
