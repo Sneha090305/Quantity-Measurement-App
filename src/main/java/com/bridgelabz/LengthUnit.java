@@ -1,11 +1,11 @@
 package com.bridgelabz;
-
 public enum LengthUnit implements IMeasurable {
 
-    FEET(1.0),
-    INCHES(1.0 / 12),
-    YARD(3.0),
-    CM(1.0 / 30.48);
+    METER(1.0),
+    CENTIMETER(0.01),
+    INCH(0.0254),
+    FEET(0.3048),
+    YARD(0.9144);
 
     private final double factor;
 

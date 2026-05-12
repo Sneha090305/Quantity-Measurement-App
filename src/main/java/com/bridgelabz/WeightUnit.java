@@ -2,8 +2,9 @@ package com.bridgelabz;
 
 public enum WeightUnit implements IMeasurable {
 
-    GRAM(1.0),
-    KILOGRAM(1000.0);
+    KILOGRAM(1.0),
+    GRAM(0.001),
+    TONNE(1000);
 
     private final double factor;
 
@@ -17,7 +18,7 @@ public enum WeightUnit implements IMeasurable {
     }
 
     @Override
-    public double fromBase(double value) {
-        return value / factor;
+    public double fromBase(double baseValue) {
+        return baseValue / factor;
     }
 }
